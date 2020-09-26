@@ -2,5 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Jbdev\Comments\Api\Data\CommentInterface" type="Jbdev\Comments\Model\Comment"/>
+    <preference for="Jbdev\Comments\Api\Data\CommentSearchResultsInterface" type="\Jbdev\Comments\Model\CommentSearchResults"/>
+    <preference for="Jbdev\Comments\Api\CommentRepositoryInterface" type="Jbdev\Comments\Model\CommentRepository"/>
 
 </config>

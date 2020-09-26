@@ -8,6 +8,13 @@ use Magento\Framework\Model\AbstractModel;
 
 class Comment extends AbstractModel implements CommentInterface
 {
+    /**
+     * @return void
+     */
+    protected function _construct()
+    {
+        $this->_init(\Jbdev\Comments\Model\ResourceModel\Comment::class);
+    }
     public function getCommentId(): string
     {
         return $this->getData(self::COMMENT_ID);
