@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Jbdev\Comments\Api\Data;
 
-interface CommentSearchResultsInterface
+use Magento\Framework\Api\SearchResultsInterface;
+
+interface CommentSearchResultsInterface extends SearchResultsInterface
 {
     /**
      * @return CommentInterface[]

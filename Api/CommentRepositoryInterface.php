@@ -29,5 +29,10 @@ interface CommentRepositoryInterface
      */
     public function get(string $commentId): CommentInterface;
 
+    /**
+     * @param SearchCriteriaInterface $searchCriteria
+     *
+     * @return CommentSearchResultsInterface
+     */
     public function getList(SearchCriteriaInterface $searchCriteria): CommentSearchResultsInterface;
 }
