@@ -1,0 +1,17 @@
+{
+    "jbdev_comment": {
+        "column": {
+            "comment_id": true,
+            "user_name": true,
+            "parent_type": true,
+            "parent_id": true,
+            "level": true,
+            "content": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

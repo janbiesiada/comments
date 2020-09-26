@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="jbdev_comment" resource="default" engine="innodb" comment="Comments Table">
+        <column xsi:type="smallint" name="comment_id" padding="6" unsigned="false" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="varchar" name="user_name" nullable="true" length="255" comment="User Name"/>
+        <column xsi:type="varchar" name="parent_type" nullable="false" length="255" comment="Parent Type"/>
+        <column xsi:type="smallint" name="parent_id" padding="6" unsigned="false" nullable="false" comment="Parent ID"/>
+        <column xsi:type="smallint" name="level" padding="6" unsigned="false" nullable="false" comment="Level"/>
+        <column xsi:type="mediumtext" name="content" nullable="true" comment="Comment Content"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Comment Creation Time"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Comment Modification Time"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="comment_id"/>
+        </constraint>
+    </table>
+</schema>
