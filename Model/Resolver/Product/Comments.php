@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Jbdev\Comments\Model\Resolver;
+namespace Jbdev\Comments\Model\Resolver\Product;
 
 use Jbdev\Comments\Model\Resolver\DataProvider\Comment as DataProvider;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -26,9 +26,6 @@ class Comments implements ResolverInterface
         $this->dataProvider = $dataProvider;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function resolve(
         Field $field,
         $context,
@@ -36,40 +33,24 @@ class Comments implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        return ['items' => $this->getData($this->getIds($args))];
+        $items = [];
+        $rootId = $this->getRootId($value);
+        if ($rootId) {
+            $items = $this->dataProvider->getTree($rootId, 'product');
+        }
+        return ['items' => $items];
     }
 
     /**
-     * @param array $args
+     * @param array $value
      *
-     * @return string[]
+     * @return string
      */
-    private function getIds(array $args): ?array
+    private function getRootId(array $value): string
     {
-        if (!isset($args['ids']) || !is_array($args['ids']) || count($args['ids']) === 0) {
-            return null;
+        if (!isset($value['entity_id']) || !is_numeric($value['entity_id'])) {
+            return '1';
         }
-
-        return $args['ids'];
-    }
-    /**
-     * @param array $ids
-     *
-     * @return array
-     */
-    private function getData(?array $ids): array
-    {
-        $data = [];
-        if (!$ids) {
-            return $this->dataProvider->getTree();
-        }
-        foreach ($ids as $id) {
-            try {
-                $data[$id] = $this->dataProvider->getData($id);
-            } catch (NoSuchEntityException $e) {
-                $data[$id] = new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
-            }
-        }
-        return $data;
+        return (string) $value['entity_id'];
     }
 }

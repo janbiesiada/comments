@@ -1,6 +1,6 @@
 <?php
 
-namespace Jbdev\Comments\Tests\Unit\Model;
+namespace Jbdev\Comments\Test\Unit\Model;
 
 use Jbdev\Comments\Model\Comment;
 use Magento\Framework\Data\Collection\AbstractDb;

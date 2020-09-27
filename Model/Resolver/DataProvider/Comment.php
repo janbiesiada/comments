@@ -6,13 +6,10 @@ namespace Jbdev\Comments\Model\Resolver\DataProvider;
 use Jbdev\Comments\Api\CommentRepositoryInterface;
 use Jbdev\Comments\Api\Data\CommentInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 
-/**
- * Cms block data provider
- */
 class Comment
 {
     /**
@@ -28,7 +25,7 @@ class Comment
      */
     private $searchCriteriaBuilder;
     /**
-     * @var \Magento\Framework\Api\SortOrderBuilder
+     * @var SortOrderBuilder
      */
     private $sortOrderBuilder;
 
@@ -36,12 +33,13 @@ class Comment
      * @param CommentRepositoryInterface $commentRepository
      * @param DataObjectProcessor $dataObjectProcessor
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param SortOrderBuilder $sortOrderBuilder
      */
     public function __construct(
         CommentRepositoryInterface $commentRepository,
         DataObjectProcessor $dataObjectProcessor,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Framework\Api\SortOrderBuilder $sortOrderBuilder
+        SortOrderBuilder $sortOrderBuilder
     ) {
         $this->commentRepository = $commentRepository;
         $this->dataObjectProcessor = $dataObjectProcessor;
@@ -67,17 +65,7 @@ class Comment
         return $this->buildArray($comment);
     }
 
-    public function getAll(): array
-    {
-        return $this->getTree();
-//        $comments = [];
-//        foreach ($this->commentRepository->getList($this->searchCriteriaBuilder->create())->getItems() as $comment) {
-//            $comments[] = $this->buildArray($comment);
-//        }
-//        return $comments;
-    }
-
-    public function getTree(): array
+    public function getTree(string $rootId = null, $rootType = null): array
     {
         $comments = [];
         $commentsById = [];
@@ -88,6 +76,7 @@ class Comment
         foreach ($this->commentRepository->getList($this->searchCriteriaBuilder->addSortOrder($sortOrder)->create())->getItems() as $comment) {
             $comments[$comment->getLevel() . '-' . $comment->getParentType() . '-' . $comment->getParentId()][] = $this->buildArray($comment);
             $commentsById[$comment->getCommentId()] = $this->buildArray($comment);
+            $commentsById[$comment->getCommentId()]['children'] = [];
         }
         $root = [];
         foreach ($comments as $identifier => $subComments) {
@@ -99,13 +88,15 @@ class Comment
             }
         }
         foreach ($commentsById as $node) {
-            if ($node['level'] == 1) {
+            if ($node['level'] == '1') {
+                if ($rootId && $rootType && ($rootId != $node['parent_id'] || $rootType != $node['parent_type'])) {
+                    continue;
+                }
                 $root[$node['comment_id']] = $node;
             }
         }
         return $root;
     }
-
 
     /**
      * @param CommentInterface $comment

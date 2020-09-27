@@ -1,5 +1,3 @@
-
-
 type Query {
     comments (
         ids: [String] @doc(description: "Ids of the comments")
@@ -7,20 +5,38 @@ type Query {
     @doc(description: "The Comments query returns information about Comments")
 }
 
-
-
 type Comments @doc(description: "Comments information") {
     items: [Comment] @doc(description: "An array of Comments")
 }
 
 type Comment @doc(description: "Comment defines all Comment information") {
+    comment_id: String! @doc(description: "comment_id")
+    user_name: String @doc(description: "user_name")
+    parent_type: String! @doc(description: "parent_type")
+    parent_id: String! @doc(description: "parent_id")
+    level: String! @doc(description: "level")
+    content: String @doc(description: "content")
+    created_at: String! @doc(description: "created_at")
+    updated_at: String! @doc(description: "updated_at")
+    children: [Comment]! @doc(description: "An array of children Comments")
+}
+
+interface ProductInterface {
+    comments: Comments @resolver(class: "Jbdev\\Comments\\Model\\Resolver\\Product\\Comments") @doc(description: "The Comments query returns information about Comments for product")
+}
+interface CategoryInterface {
+    comments: Comments @resolver(class: "Jbdev\\Comments\\Model\\Resolver\\Category\\Comments") @doc(description: "The Comments query returns information about Comments for category")
+}
+input CommentInput @doc(description: "Comment defines all Comment information") {
     comment_id: String @doc(description: "comment_id")
     user_name: String @doc(description: "user_name")
-    parent_type: String @doc(description: "parent_type")
-    parent_id: String @doc(description: "parent_id")
-    level: String @doc(description: "level")
+    parent_type: String! @doc(description: "parent_type")
+    parent_id: String! @doc(description: "parent_id")
+    level: String! @doc(description: "level")
     content: String @doc(description: "content")
-    created_at: String @doc(description: "created_at")
-    updated_at: String @doc(description: "updated_at")
-    children: [Comment] @doc(description: "An array of children Comments")
+}
+
+type Mutation {
+    createComment(input: CommentInput!): Boolean @resolver(class: "Jbdev\\Comments\\Model\\Resolver\\CreateComment") @doc(description: "Create New comment")
+    updateComment(input: CommentInput!): Boolean @resolver(class: "Jbdev\\Comments\\Model\\Resolver\\UpdateComment") @doc(description: "Edit Comment")
 }
