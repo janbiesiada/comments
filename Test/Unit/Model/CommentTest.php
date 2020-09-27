@@ -3,6 +3,8 @@
 namespace Jbdev\Comments\Test\Unit\Model;
 
 use Jbdev\Comments\Model\Comment;
+use Jbdev\Comments\Model\ResourceModel\Comment as ResourceModel;
+use Jbdev\Comments\Model\ResourceModel\Comment\Collection;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -26,10 +28,14 @@ class CommentTest extends TestCase
         $registry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $resource = $this->getMockBuilder(AbstractResource::class)
+        $resource = $this->getMockBuilder(ResourceModel::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getIdFieldName'])
             ->getMock();
-        $resourceCollection = $this->getMockBuilder(AbstractDb::class)
+        $resource->expects($this->any())
+            ->method('getIdFieldName')
+            ->willReturn('comment_id');
+        $resourceCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $testData = [
