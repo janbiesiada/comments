@@ -1,0 +1,26 @@
+
+
+type Query {
+    comments (
+        ids: [String] @doc(description: "Ids of the comments")
+    ): Comments @resolver(class: "Jbdev\\Comments\\Model\\Resolver\\Comments")
+    @doc(description: "The Comments query returns information about Comments")
+}
+
+
+
+type Comments @doc(description: "Comments information") {
+    items: [Comment] @doc(description: "An array of Comments")
+}
+
+type Comment @doc(description: "Comment defines all Comment information") {
+    comment_id: String @doc(description: "comment_id")
+    user_name: String @doc(description: "user_name")
+    parent_type: String @doc(description: "parent_type")
+    parent_id: String @doc(description: "parent_id")
+    level: String @doc(description: "level")
+    content: String @doc(description: "content")
+    created_at: String @doc(description: "created_at")
+    updated_at: String @doc(description: "updated_at")
+    children: [Comment] @doc(description: "An array of children Comments")
+}
